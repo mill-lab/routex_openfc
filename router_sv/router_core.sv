@@ -1,0 +1,112 @@
+`timescale 1ns/1ps
+`default_nettype none
+module router_core # ( parameter NumPorts = 4, PassThrough=4'b0011 )
+   ( input wire CLK, RST,
+
+     input wire [NumPorts-1:0][63:0]  D,
+     input wire [NumPorts-1:0] 	      D_VALID,
+     output wire [NumPorts-1:0]       D_BP,
+     output wire [NumPorts-1:0]       COLLISION,
+
+     output wire [NumPorts-1:0][63:0] PT,
+     output wire [NumPorts-1:0]       PT_VALID,
+     
+     output wire [NumPorts-1:0][63:0] Q,
+     output wire [NumPorts-1:0]       Q_VALID,
+     input wire [NumPorts-1:0] 	      Q_BP,
+     output wire [NumPorts-1:0]       Q_SOF
+     );
+
+   // - - - - - - - - - - - - - - - - - - - - 
+   // Crossbar outputs
+   
+   wire [NumPorts-1:0][63:0]          CB_Q;
+   wire [NumPorts-1:0] 		      CB_Q_HDR_VALID, CB_Q_PLD_VALID;
+   
+   // - - - - - - - - - - - - - - - - - - - - 
+   // Router sink ports x4
+   
+   wire [NumPorts-1:0][7:0]     DEST;
+   wire [NumPorts-1:0] 		DEST_VALID, SOF, EOF, HDR_VALID, PLD_VALID;
+   wire [NumPorts-1:0][63:0] 	FRAME;
+
+   reg [NumPorts-1:0][63:0] 	D_R;
+   reg [NumPorts-1:0] 		D_VR;
+
+   always @ (posedge CLK) begin
+      D_R <= D;
+      D_VR <= D_VALID;
+   end
+
+   genvar i;
+   generate
+      for (i=0; i<NumPorts; i=i+1) begin : router_sink_gen
+         wire [63:0] SINK_D;
+         wire        SINK_D_VALID;
+
+         // per lane connection signals
+         wire [63:0] Dc    = D_R [i];
+         wire [63:0] CB_Qc = CB_Q[i];
+         wire [63:0] PTc;
+         assign PT[i] = PTc;
+         
+         // Header pass-through logic
+         if (PassThrough[i]) begin
+            // pass-through logic before router_sink for PEs
+            assign SINK_D       = Dc;
+            assign SINK_D_VALID = D_VR[i];
+            assign Q_VALID[i]   = CB_Q_PLD_VALID[i];
+
+            assign PTc          = CB_Q_HDR_VALID[i] ? CB_Qc : 0;
+            assign PT_VALID[i]  = CB_Q_HDR_VALID[i];
+         end else begin // No pass-through ports (PCIe/Aurora)
+            assign SINK_D       = Dc;
+            assign SINK_D_VALID = D_VR[i];
+            assign Q_VALID[i]   = CB_Q_PLD_VALID[i] | CB_Q_HDR_VALID[i];
+            assign PT_VALID[i]  = 0;
+         end
+         
+         router_sink uut_rs
+           ( .CLK(CLK), .RST(RST | COLLISION[i]),
+            
+             // from source
+             .D      (SINK_D), 
+             .D_VALID(SINK_D_VALID),
+            
+             // to matrix 
+             .DEST(DEST[i]), 
+             .DEST_VALID(DEST_VALID[i]),
+            
+             .SOF(SOF[i]), .EOF(EOF[i]),
+             .FRAME(FRAME[i]),
+             .HEADER_VALID (HDR_VALID[i]),
+             .PAYLOAD_VALID(PLD_VALID[i])
+             );
+      end // block: router_sink_gen
+   endgenerate
+
+   router_cb # ( .NumPorts(NumPorts) ) cb
+     ( .CLK(CLK), .RST(RST),
+       .D   ( FRAME ),
+       .DEST( DEST ),
+       .DEST_VALID(DEST_VALID),
+       .D_HDR_VALID(HDR_VALID),
+       .D_PLD_VALID(PLD_VALID),
+       .D_SOF(SOF),
+       .D_EOF(EOF),
+       .D_BP (D_BP),
+       .COLLISION(COLLISION),
+      
+       .Q          (CB_Q),
+       .Q_HDR_VALID(CB_Q_HDR_VALID),
+       .Q_PLD_VALID(CB_Q_PLD_VALID),
+       .Q_SOF      (Q_SOF),
+       .Q_EOF      (),
+       .Q_BP       (Q_BP)
+       );
+
+   assign Q = CB_Q;
+   // Q_VALID is under control of PassThrough[x]
+   
+endmodule // router_core
+`default_nettype wire

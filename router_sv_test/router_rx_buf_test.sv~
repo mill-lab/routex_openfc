@@ -1,0 +1,52 @@
+`timescale 1ns/1ps
+module router_rx_buf_test();
+   parameter STEP = 10;
+   parameter Numports = 4;
+
+   reg RST, CLK;
+
+   reg [Numports-1:0][63:0] D;
+   reg [Numports-1:0] 	    D_VALID;
+
+   reg [63:0] 		    CNT;
+
+   router_core  uut (.RST(RST),
+		     .CLK(CLK),
+		     .D(D),
+		     .D_VALID(D_VALID),
+		     .Q_BP(4'b0),
+		     .COLLISION(COLLISION),
+		     .D_BP(),
+		     .Q(),
+		     .Q_VALID());
+
+   initial CLK <= 1;
+   always #(STEP/2) CLK <= ~CLK;
+
+   initial begin
+      $shm_open();
+      $shm_probe("SA");
+
+      RST <= 1;
+      D <= 0;
+
+      #(12.1*STEP)
+      RST <= 0;
+
+      #(100*STEP)
+      $finish;
+      
+   end // initial begin
+
+   always @ (posedge CLK) begin
+      if (RST) begin
+	 CNT <= 0;
+      end else begin
+	 CNT <= CNT + 1;
+	 case (CNT)
+	   1: begin
+	 endcase // case (CNT)
+      end
+   end // always @ (posedge CLK)
+endmodule // router_rx_buf_test
+

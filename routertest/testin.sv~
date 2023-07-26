@@ -1,0 +1,18 @@
+`default_nettype none
+module testin
+  (input wire CLK, RST,
+   output wire [3:0][63:0] D,
+   output wire [3:0] D_VALID);
+
+   reg [3:0][63:0] D;
+   reg [3:0] D_VALID;
+
+   always @ (posedge CLK) begin
+      if (RST) begin
+     D = 0;
+     D_VALID = 0;
+      end else begin
+      
+	 
+	 
+`default_nettype wire

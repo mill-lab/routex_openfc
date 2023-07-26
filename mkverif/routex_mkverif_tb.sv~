@@ -1,0 +1,112 @@
+`timescale 1ns/1ps
+module routex_mkverif_test();
+   parameter STEP = 10;
+   parameter NumPorts = 4;
+   reg	     RST, CLK;
+
+   reg [NumPorts-1:0][7:0][63:0] DEST;
+   reg [NumPorts-1:0]		 GO, BP;
+   reg [NumPorts-1:0][63:0]	 LEN;
+   
+   reg [63:0]			 CNT;
+   
+   mkverif # (.NumPorts(NumPorts)) uut
+     (.RST(RST),
+      .CLK(CLK),
+      .DEST(DEST),
+      .GO(GO),
+      .LEN(LEN),
+      .BP(BP),
+      .FALSE()
+      );
+   
+   initial CLK <= 1;
+   always #(STEP/2) CLK <= ~CLK;
+
+   initial begin
+      $shm_open();
+      $shm_probe("ASM");
+
+      RST <= 1;
+      DEST <= 0;
+      GO <= 0;
+      LEN <= 0;
+      BP <= 0;
+
+      #(12.1*STEP)
+      RST <= 0;
+      
+      #(300*STEP)
+      $finish;
+   end // initial begin
+
+   always @ (posedge CLK) begin
+      if (RST) begin
+	 CNT <= 0;
+      end else begin 
+	 CNT <= CNT + 1;
+	 case (CNT)
+	   100: begin
+	      DEST[0][0] <= {8'h01, 56'h4};
+	      LEN[0] <= 200;
+	      GO[0] <= 1;
+	      
+	      // DEST[1][0] <= {8'h01, 56'h2};
+	      // LEN[1] <= 100;
+	      // GO[1] <= 1;
+	      	      
+	      // DEST[2][0] <= {8'h01, 56'h3};
+	      // LEN[2] <= 100;
+	      // GO[2] <= 1;
+	      
+	      // DEST[3][0] <= {8'h01, 56'h4};
+	      // LEN[3] <= 100;
+	      // GO[3] <= 1;
+	   end // case: 101
+
+	   101: begin
+	      GO <= 0;
+	   end
+	   
+	   105: begin
+	      DEST[1][0] <= {8'h01, 56'h3};
+	      LEN[1] <= 200;
+	      GO[1] <= 1;
+	   end
+	   
+	   106: begin
+	      GO <= 0;
+	   end
+
+	   110: begin
+	      DEST[2][0] <= {8'h01, 56'h2};
+	      LEN[2] <= 200;
+	      GO[2] <= 1;
+	   end
+	   
+	   111: begin
+	      GO <= 0;
+	   end
+	   
+	   115: begin
+	      DEST[3][0] <= {8'h01, 56'h1};
+	      LEN[3] <= 200;
+	      GO[3] <= 1;
+	   end
+	   
+	   116: begin
+	      GO <= 0;
+	   end
+
+	   122: begin
+	      BP <= 4'b1111;
+	   end
+
+	   132: begin
+	      BP <= 0;
+	   end
+
+	 endcase // case (CNT)
+      end
+   end // always @ (posedge CLK)
+endmodule

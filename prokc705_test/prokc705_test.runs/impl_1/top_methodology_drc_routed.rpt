@@ -1,0 +1,302 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.1 (lin64) Build 3865809 Sun May  7 15:04:56 MDT 2023
+| Date         : Fri Jun 16 15:24:20 2023
+| Host         : tristar running 64-bit Ubuntu 20.04.5 LTS
+| Command      : report_methodology -file top_methodology_drc_routed.rpt -pb top_methodology_drc_routed.pb -rpx top_methodology_drc_routed.rpx
+| Design       : top
+| Device       : xc7k325tffg900-2
+| Speed File   : -2
+| Design State : Fully Routed
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 38
++-----------+------------------+----------------------------------------------------+------------+
+| Rule      | Severity         | Description                                        | Violations |
++-----------+------------------+----------------------------------------------------+------------+
+| TIMING-3  | Critical Warning | Invalid primary clock on Clock Modifying Block     | 1          |
+| TIMING-4  | Critical Warning | Invalid primary clock redefinition on a clock tree | 1          |
+| TIMING-17 | Critical Warning | Non-clocked sequential cell                        | 4          |
+| TIMING-25 | Critical Warning | Invalid clock waveform on gigabit transceiver (GT) | 3          |
+| TIMING-27 | Critical Warning | Invalid primary clock on hierarchical pin          | 1          |
+| LUTAR-1   | Warning          | LUT drives async reset alert                       | 15         |
+| PDRC-190  | Warning          | Suboptimally placed synchronized register chain    | 10         |
+| TIMING-10 | Warning          | Missing property on synchronizer                   | 1          |
+| TIMING-24 | Warning          | Overridden Max delay datapath only                 | 2          |
++-----------+------------------+----------------------------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+TIMING-3#1 Critical Warning
+Invalid primary clock on Clock Modifying Block  
+A primary clock pcie_refclk is created on the output pin or net pci/refclk_ibuf/O of a Clock Modifying Block
+Related violations: <none>
+
+TIMING-4#1 Critical Warning
+Invalid primary clock redefinition on a clock tree  
+Invalid clock redefinition on a clock tree. The primary clock cm/dcm1/inst/clk_in1 is defined downstream of clock CLK200P and overrides its insertion delay and/or waveform definition
+Related violations: <none>
+
+TIMING-17#1 Critical Warning
+Non-clocked sequential cell  
+The clock pin pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/asyncCompare/rDir_reg/C is not reached by a timing clock
+Related violations: <none>
+
+TIMING-17#2 Critical Warning
+Non-clocked sequential cell  
+The clock pin pci/riffa/riffa_inst/channels[0].channel/channel/txPort/gate/fifo/asyncCompare/rDir_reg/C is not reached by a timing clock
+Related violations: <none>
+
+TIMING-17#3 Critical Warning
+Non-clocked sequential cell  
+The clock pin pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/asyncCompare/rDir_reg/C is not reached by a timing clock
+Related violations: <none>
+
+TIMING-17#4 Critical Warning
+Non-clocked sequential cell  
+The clock pin pci/riffa/riffa_inst/channels[1].channel/channel/txPort/gate/fifo/asyncCompare/rDir_reg/C is not reached by a timing clock
+Related violations: <none>
+
+TIMING-25#1 Critical Warning
+Invalid clock waveform on gigabit transceiver (GT)  
+The waveform of the user clock au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/kc705_sfp_slave_multi_gt_i/kc705_sfp_slave_gtx_inst/gtxe2_i/RXOUTCLK defined on the transceiver output pin au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/kc705_sfp_slave_multi_gt_i/kc705_sfp_slave_gtx_inst/gtxe2_i/RXOUTCLK or on the net connected to that pin is not consistent with the transceiver settings. The auto-derived clock period is UNDEFINED and the user-defined clock period is 4.096. The expected clock waveform is computed based on the GT settings and the incoming clock to the transceiver. It is recommended to check that there are no missing clocks to the GT and that all the transceiver settings are correct
+Related violations: <none>
+
+TIMING-25#2 Critical Warning
+Invalid clock waveform on gigabit transceiver (GT)  
+The waveform of the user clock au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/kc705_sma_6g_frame_multi_gt_i/kc705_sma_6g_frame_gtx_inst/gtxe2_i/RXOUTCLK defined on the transceiver output pin au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/kc705_sma_6g_frame_multi_gt_i/kc705_sma_6g_frame_gtx_inst/gtxe2_i/RXOUTCLK or on the net connected to that pin is not consistent with the transceiver settings. The auto-derived clock period is UNDEFINED and the user-defined clock period is 4.096. The expected clock waveform is computed based on the GT settings and the incoming clock to the transceiver. It is recommended to check that there are no missing clocks to the GT and that all the transceiver settings are correct
+Related violations: <none>
+
+TIMING-25#3 Critical Warning
+Invalid clock waveform on gigabit transceiver (GT)  
+The waveform of the user clock au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/kc705_sma_6g_frame_multi_gt_i/kc705_sma_6g_frame_gtx_inst/gtxe2_i/TXOUTCLK defined on the transceiver output pin au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/kc705_sma_6g_frame_multi_gt_i/kc705_sma_6g_frame_gtx_inst/gtxe2_i/TXOUTCLK or on the net connected to that pin is not consistent with the transceiver settings. The auto-derived clock period is UNDEFINED and the user-defined clock period is 4.096. The expected clock waveform is computed based on the GT settings and the incoming clock to the transceiver. It is recommended to check that there are no missing clocks to the GT and that all the transceiver settings are correct
+Related violations: <none>
+
+TIMING-27#1 Critical Warning
+Invalid primary clock on hierarchical pin  
+A primary clock cm/dcm1/inst/clk_in1 is created on an inappropriate internal pin cm/dcm1/inst/clk_in1. It is not recommended to create a primary clock on a hierarchical pin when its driver pin has a fanout connected to multiple clock pins
+Related violations: <none>
+
+LUTAR-1#1 Warning
+LUT drives async reset alert  
+LUT cell au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/cbcc_gtx0_i/rxfsm_reset_i_inferred_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/init_wait_count_reg[5]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/init_wait_count_reg[6]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/init_wait_count_reg[7]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/init_wait_done_reg/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/reset_time_out_reg/PRE,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/run_phase_alignment_int_reg/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_fsm_reset_done_int_reg/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[0]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[1]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[2]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[3]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[4]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[5]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[6]/CLR,
+au/aurora_core_sfp/inst/kc705_sfp_slave_wrapper_i/rxresetfsm_i/rx_state_reg[7]/CLR
+ (the first 15 of 23 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#2 Warning
+LUT drives async reset alert  
+LUT cell au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/cbcc_gtx0_i/rxfsm_reset_i_inferred_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/init_wait_count_reg[5]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/init_wait_count_reg[6]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/init_wait_count_reg[7]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/init_wait_done_reg/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/reset_time_out_reg/PRE,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/run_phase_alignment_int_reg/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_fsm_reset_done_int_reg/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[0]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[1]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[2]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[3]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[4]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[5]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[6]/CLR,
+au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/rxresetfsm_i/rx_state_reg[7]/CLR
+ (the first 15 of 23 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#3 Warning
+LUT drives async reset alert  
+LUT cell au/aurora_core_sma/inst/kc705_sma_6g_frame_core_i/kc705_sma_6g_frame_wrapper_i/txresetfsm_i/clk_not_locked_i_inferred_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) au/aurora_core_sma/inst/clock_module_i/mmcm_adv_inst/RST. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#4 Warning
+LUT drives async reset alert  
+LUT cell cm/dcm1_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) cm/dcm1/inst/mmcm_adv_inst/RST. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#5 Warning
+LUT drives async reset alert  
+LUT cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.gwrrd_rst_sync_stage[2].rrst_inst/ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0]/PRE,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1]/PRE
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[2]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#6 Warning
+LUT drives async reset alert  
+LUT cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.gwrrd_rst_sync_stage[2].wrst_inst/ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0]/PRE,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1]/PRE
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_RD/U_RD_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_rdfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#7 Warning
+LUT drives async reset alert  
+LUT cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.gwrrd_rst_sync_stage[2].rrst_inst/ngwrdrst.grst.g7serrst.rd_rst_reg[2]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[0]/PRE,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[1]/PRE
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.rd_rst_reg_reg[2]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#8 Warning
+LUT drives async reset alert  
+LUT cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.gwrrd_rst_sync_stage[2].wrst_inst/ngwrdrst.grst.g7serrst.wr_rst_reg[2]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[0]/PRE,
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[1]/PRE
+dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD6_WR/U_WR_FIFO/SUBCORE_FIFO.xsdbm_v3_0_0_wrfifo_inst/inst_fifo_gen/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.g7serrst.wr_rst_reg_reg[2]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#9 Warning
+LUT drives async reset alert  
+LUT cell pci/PCIe_i/inst/inst/user_reset_out_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/PCIe_i/inst/inst/user_reset_int_reg/PRE
+pci/PCIe_i/inst/inst/user_reset_out_reg/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#10 Warning
+LUT drives async reset alert  
+LUT cell pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/rdPtrEmpty/rDir_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/asyncCompare/rDir_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#11 Warning
+LUT drives async reset alert  
+LUT cell pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/reader/rRdValid_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[5]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[6]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[7]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[8]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[9]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[0]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[1]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[2]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[3]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[4]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[5]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[6]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[7]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[8]/CLR,
+pci/riffa/riffa_inst/channels[0].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[9]/CLR
+ (the first 15 of 76 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#12 Warning
+LUT drives async reset alert  
+LUT cell pci/riffa/riffa_inst/channels[0].channel/channel/txPort/gate/fifo/rdPtrEmpty/rDir_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/riffa/riffa_inst/channels[0].channel/channel/txPort/gate/fifo/asyncCompare/rDir_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#13 Warning
+LUT drives async reset alert  
+LUT cell pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/rdPtrEmpty/rDir_i_2__1, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/asyncCompare/rDir_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#14 Warning
+LUT drives async reset alert  
+LUT cell pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/reader/rRdValid_i_1__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[5]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[6]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[7]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[8]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtrP1_reg[9]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[0]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[1]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[2]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[3]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[4]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[5]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[6]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[7]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[8]/CLR,
+pci/riffa/riffa_inst/channels[1].channel/channel/rxPort/mainFifo/fifo/wrPtrFull/rPtr_reg[9]/CLR
+ (the first 15 of 76 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#15 Warning
+LUT drives async reset alert  
+LUT cell pci/riffa/riffa_inst/channels[1].channel/channel/txPort/gate/fifo/rdPtrEmpty/rDir_i_2__2, with 2 or more inputs, drives asynchronous preset/clear pin(s) pci/riffa/riffa_inst/channels[1].channel/channel/txPort/gate/fifo/asyncCompare/rDir_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+PDRC-190#1 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_reg[0] in site SLICE_X68Y210 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_1_reg[0] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#2 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_reg[1] in site SLICE_X65Y210 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_1_reg[1] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#3 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_reg[2] in site SLICE_X66Y210 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_1_reg[2] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#4 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_reg[3] in site SLICE_X69Y210 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD2/stat_reg_1_reg[3] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#5 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_reg[0] in site SLICE_X66Y212 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_1_reg[0] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#6 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_reg[1] in site SLICE_X64Y211 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_1_reg[1] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#7 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_reg[2] in site SLICE_X65Y212 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD3/stat_reg_1_reg[2] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#8 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_reg[0] in site SLICE_X55Y214 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_1_reg[0] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#9 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_reg[1] in site SLICE_X56Y214 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_1_reg[1] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+PDRC-190#10 Warning
+Suboptimally placed synchronized register chain  
+The FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_reg[2] in site SLICE_X54Y214 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell dbg_hub/inst/BSCANID.u_xsdbm_id/CORE_XSDB.UUT_MASTER/U_ICON_INTERFACE/U_CMD7_STAT/stat_reg_1_reg[2] is not placed in the same (SLICE) site.
+Related violations: <none>
+
+TIMING-10#1 Warning
+Missing property on synchronizer  
+One or more logic synchronizer has been detected between 2 clock domains but the synchronizer does not have the property ASYNC_REG defined on one or both registers. It is recommended to run report_cdc for a complete and detailed CDC coverage
+Related violations: <none>
+
+TIMING-24#1 Warning
+Overridden Max delay datapath only  
+An asynchronous set_clock_groups or a set_false path (see constraint position 85 in the Timing Constraints window in Vivado IDE) between clocks userclk1 and clk_out2_clk_200_50_100 overrides a set_max_delay -datapath_only (position 100). It is not recommended to override a set_max_delay -datapath_only constraint. Replace the set_clock_groups or set_false_path between clocks with point-to-point set_false_path constraints
+Related violations: <none>
+
+TIMING-24#2 Warning
+Overridden Max delay datapath only  
+An asynchronous set_clock_groups or a set_false path (see constraint position 86 in the Timing Constraints window in Vivado IDE) between clocks clk_out2_clk_200_50_100 and userclk1 overrides a set_max_delay -datapath_only (position 102). It is not recommended to override a set_max_delay -datapath_only constraint. Replace the set_clock_groups or set_false_path between clocks with point-to-point set_false_path constraints
+Related violations: <none>
+
+

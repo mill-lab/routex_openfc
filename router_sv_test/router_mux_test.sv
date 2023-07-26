@@ -1,0 +1,130 @@
+`timescale 1ns/1ps
+module router_mux_test();
+   parameter STEP = 10;
+   parameter Numports = 4, PortNo = 1;
+   
+   reg RST, CLK;
+
+   reg [Numports-1:0][63:0] D;
+   reg [Numports-1:0][7:0]  DEST;
+   reg [Numports-1:0] 	    DEST_VALID, D_HDR_VALID, D_PLD_VALID;
+   reg [Numports-1:0] 	    D_SOF, D_EOF;
+
+   reg [63:0] 		    CNT;
+   
+   router_mux # (.PortNo(1) ) uut
+     (.RST(RST),
+      .CLK(CLK),
+      .D(D),
+      .DEST(DEST),
+      .DEST_VALID(DEST_VALID),
+      .D_HDR_VALID(D_HDR_VALID),
+      .D_PLD_VALID(D_PLD_VALID),
+      .D_SOF(D_SOF),
+      .D_EOF(D_EOF),
+      .Q_BP(4'b0),
+      .D_BP(),
+      .COLLISION(),
+      .Q(),
+      .Q_HDR_VALID(),
+      .Q_PLD_VALID(),
+      .Q_SOF(),
+      .Q_EOF());
+
+   initial CLK <= 1;
+   always #(STEP/2) CLK <= ~CLK;
+
+   initial begin
+      $shm_open();
+      $shm_probe("SA");
+
+      RST <= 1;
+      DEST_VALID <= 0;
+      D_PLD_VALID <= 0;
+      D_SOF <= 0;
+      D_EOF <= 0;
+
+      #(12.1*STEP)
+      RST <= 0;
+      
+      #(100*STEP)
+      $finish;
+   end // initial begin
+
+   always @ (posedge CLK) begin
+      if (RST) begin
+	 CNT <= 0;
+      end else begin
+	 CNT <= CNT + 1;
+	 case (CNT)
+	   1: begin
+	      DEST[0] <= 1;
+	      DEST[1] <= 1;
+	      DEST_VALID[0] <= 1;
+	      DEST_VALID[1] <= 1;
+	      D_SOF[0] <= 1;
+	      D_SOF[1] <= 1; end
+	   2: begin
+	      D[0] <= {8'h1, 56'h1};
+	      D[1] <= {8'h1, 56'h1};
+	      D_HDR_VALID[0] <= 1;
+	      D_HDR_VALID[1] <= 1;
+	      D_SOF <= 0; end
+	   3: begin
+	      D[0] <= 10;
+	      DEST_VALID[1] <= 0;
+	      D_HDR_VALID[0] <= 0;
+	      D_PLD_VALID <= 1; end
+	   4: begin D[0] <= 1; end
+	   5: begin D[0] <= 2; end
+	   6: begin D[0] <= 3; end
+	   7: begin D[0] <= 4; end
+	   8: begin D[0] <= 5; end
+	   9: begin D[0] <= 6; end
+	   10: begin D[0] <= 7; end
+	   11: begin D[0] <= 8; end
+	   12: begin D[0] <= 9; end
+	   13: begin
+	      D[0] <= 10;
+	      D_EOF <= 1; end
+	   14: begin
+	      DEST_VALID <= 0;
+	      D_PLD_VALID <= 0;
+	      D_EOF <= 0; end
+	   15:;
+	   16:;
+	   17:;
+	   18:;
+	   19:;
+	   20:;
+	   21:;
+	   22:;
+	   23:;
+	   24: begin
+	      DEST_VALID[1] <= 1;
+	      D_SOF[1] <= 1; end
+	   25: D_SOF <= 0;
+	   26: begin
+	      D[1] <= 10;
+	      D_HDR_VALID[1] <= 0;
+	      D_PLD_VALID[1] <= 1; end
+	   27: D[1] <= 16*1;
+	   28: D[1] <= 16*2;
+	   29: D[1] <= 16*3;
+	   30: D[1] <= 16*4;
+	   31: D[1] <= 16*5;
+	   32: D[1] <= 16*6;
+	   33: D[1] <= 16*7;
+	   34: D[1] <= 16*8;
+	   35: D[1] <= 16*9;
+	   36: begin
+	      D[1] <= 16*10;
+	      D_EOF[1] <= 1; end
+	   37: begin
+	      DEST_VALID <= 0;
+	      D_PLD_VALID <= 0;
+	      D_EOF <= 0; end
+	 endcase // case (CNT)
+      end // else: !if(RST)
+   end // always @ (posedge CLK)
+endmodule // router_mux4_test

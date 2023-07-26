@@ -1,0 +1,14 @@
+Mon Jul 10 11:02:31 2023: Server was asked to start on port: '33151'
+Mon Jul 10 11:02:31 2023: Server is using token UUID: '2e398f20-0878-493a-a85e-48b765235bca'
+Mon Jul 10 11:02:31 2023: Attempting to start server on port '33151'
+Mon Jul 10 11:02:31 2023: XRC main fifo: created main fifo '/tmp/xrcmain2e398f20-0878-493a-a85e-48b765235bca', fd read = 11
+Mon Jul 10 11:02:31 2023: Running Rule Check Server
+Mon Jul 10 11:02:31 2023: Version 1.6.1
+Mon Jul 10 11:02:31 2023: Rule Check Server: Accepted socket connection from client
+Mon Jul 10 11:02:31 2023: EXCHANGE_TOKEN received, server token: 2e398f20-0878-493a-a85e-48b765235bca, passed token: 2e398f20-0878-493a-a85e-48b765235bca
+Wed Jul 12 12:09:09 2023: STOP_SERVER received, server token: 2e398f20-0878-493a-a85e-48b765235bca, passed token: 2e398f20-0878-493a-a85e-48b765235bca
+Wed Jul 12 12:09:09 2023: Socket received request to stop server.
+Wed Jul 12 12:09:09 2023: SERVER: destructor for server bound to port 33151
+Wed Jul 12 12:09:09 2023: XRC main fifo: Good unlink of /tmp/xrcmain2e398f20-0878-493a-a85e-48b765235bca
+Wed Jul 12 12:09:09 2023: Server exiting with status 0.
+Wed Jul 12 12:09:09 2023: Closing log file.

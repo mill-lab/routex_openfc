@@ -1,0 +1,265 @@
+`timescale 1ns/1ps
+`default_nettype none
+
+module mkverif # ( parameter NumPorts = 4, PassThrough=4'b0011 )
+   (input wire CLK, RST,
+    
+    input wire [NumPorts-1:0]		 GO, BP,
+    input wire [NumPorts-1:0][63:0]	 LEN,
+    input wire [NumPorts-1:0][7:0][63:0] DEST,
+    output wire [NumPorts-1:0]		 FALSE
+    );
+   
+   wire [NumPorts-1:0][7:0][63:0]	 RTX_Di;
+   wire [NumPorts-1:0]			 RTX_D_VALIDi, RTX_Q_BPi;
+
+   wire [NumPorts-1:0][7:0][63:0]	 RTX_Qi;
+   wire [NumPorts-1:0]			 RTX_Q_VALIDi, RTX_D_BPi, RTX_Q_SOFi;
+   
+   genvar				 i;
+   generate
+      for (i=0; i<NumPorts; i=i+1) begin : mktxrx_gen
+	 
+	 mkverif_tx # (.NumPorts(NumPorts), .PortNo(i+1)) mktx
+	     (.RST(RST),                     // I
+	      .CLK(CLK),                     // I
+	      .GO(GO),                       // I
+	      .DEST(DEST),                   // I
+	      .LEN(LEN),                     // I
+	      .BP(BP),                       // I
+	      .RTX_D(RTX_Di[i]),             // O
+	      .RTX_D_VALID(RTX_D_VALIDi[i]), // O
+	      .RTX_Q_BP(RTX_Q_BPi[i])        // O
+	      );
+
+	 mkverif_rx # (.NumPorts(NumPorts), .PortNo(i+1)) mkrx
+	   (.RST(RST),                       // I
+	    .CLK(CLK),                       // I
+	    .RTX_Q(RTX_Qi[i]),               // I
+	    .RTX_Q_VALID(RTX_Q_VALIDi[i]),   // I
+	    .RTX_D_BP(RTX_D_BPi[i]),         // I
+	    .FALSE(FALSE[i])                 // O
+	    );
+      end
+   endgenerate
+   
+   routex #(.PassThrough(4'b0), .NumPorts(NumPorts)) rtxtop
+     (.RST(RST),              // I
+      .CLK(CLK),              // I
+      .D(RTX_Di),             // I
+      .D_VALID(RTX_D_VALIDi), // I
+      .Q_BP(RTX_Q_BPi),       // I
+      .Q(RTX_Qi),             // O
+      .Q_VALID(RTX_Q_VALIDi), // O
+      .D_BP(RTX_D_BPi),       // O
+      .Q_SOF(RTX_Q_SOFi)      // O
+      );
+   
+endmodule
+
+module mkverif_tx # ( parameter NumPorts = 4, PortNo = 1)
+   (input wire CLK, RST,
+    
+    input wire [NumPorts-1:0]		 GO, BP,
+    input wire [NumPorts-1:0][63:0]	 LEN,
+    input wire [NumPorts-1:0][7:0][63:0] DEST,
+
+    output reg [7:0][63:0]		 RTX_D,
+    output reg				 RTX_D_VALID,
+    output wire				 RTX_Q_BP
+    );
+   
+   reg [2:0]				 STAT;
+   reg [7:0][63:0]			 RHDR, PLD;
+
+   // - - - - - - - - - - - - - - - - - - - -
+   // pass on back pressure
+
+   assign RTX_Q_BP = BP[PortNo-1];
+
+   // - - - - - - - - - - - - - - - - - - - -
+   // generate routing header
+   
+   assign RHDR[7] = LEN[PortNo-1];
+   assign RHDR[6] = DEST[PortNo-1][6];
+   assign RHDR[5] = DEST[PortNo-1][5];
+   assign RHDR[4] = DEST[PortNo-1][4];
+   assign RHDR[3] = DEST[PortNo-1][3];
+   assign RHDR[2] = DEST[PortNo-1][2];
+   assign RHDR[1] = DEST[PortNo-1][1];
+   assign RHDR[0] = DEST[PortNo-1][0];
+
+   // - - - - - - - - - - - - - - - - - - - -
+   // generate payload
+
+   wire [3:0] 				 PortNoi;
+   wire [3:0] 				 DESTi;
+   assign PortNoi = PortNo;
+   assign DESTi = DEST[PortNo-1][0][3:0];
+   			 
+   genvar				 i;
+   generate
+      for (i=0; i<8; i=i+1) begin : payload_gen
+	 always @ (posedge CLK) begin
+	    if (RST | STAT[0]) begin
+               PLD[i] <= {PortNoi, DESTi, i};
+	    end else begin
+	       if (STAT[1]) begin
+		  PLD[i] <= PLD[i] + 8;
+	       end
+	    end
+	 end
+      end
+   endgenerate
+   
+   always @ (posedge CLK) begin
+      if (RST) begin
+	 STAT <= 3'b001;
+	 RTX_D <= 0;
+	 RTX_D_VALID <= 0;
+      // RTX_Q_BP <= 0;
+      end else begin
+	 case (STAT)
+	   3'b001: begin
+	      RTX_D <= 0;
+	      RTX_D_VALID <= 0;
+	      if (GO[PortNo-1]) begin	      
+		 RTX_D <= RHDR;
+		 RTX_D_VALID <= 1;
+		 STAT <= 010;
+	      end
+	   end
+
+	   3'b010: begin
+	      RTX_D <= PLD;
+	      if (PLD[7][31:0] >= (LEN[PortNo-1] - 1)) begin
+		 STAT <= 3'b001;
+	      end
+	   end
+
+	   default: begin
+	      STAT <= 3'b001;
+	   end
+	 endcase // case (STAT)
+      end // else: !if(RST)
+   end // always @ (posedge CLK)
+endmodule // mkverif_tx
+
+
+module mkverif_rx # ( parameter NumPorts = 4, PortNo = 1)
+  (input wire CLK, RST,
+   
+   input wire [7:0][63:0] RTX_Q,
+   input wire		  RTX_Q_VALID, RTX_D_BP,
+   output reg		  FALSE
+   );
+
+   reg [2:0]		  STAT;
+   reg			  DONE;
+   reg [63:0]		  LEN;
+
+   /*
+   wire [7:0]		  HDR_FLG;
+
+   genvar		  i;
+   generate
+      for (i=0; i<8; i=i+1) begin : HDR_FLG_gen
+	 assign HDR_FLG[i] = (RTX_Q[i][63:56] == 1);
+      end
+   endgenerate
+    */
+    
+   // - - - - - - - - - - - - - - - - - - - -
+   // generate ROUT_PORT number
+   
+   /*
+   wire [7:0]  ROUT_PORT;
+   wire [7:0]  DEST_FLG;
+
+   router_ch_sel cs
+     (.REQ(HDR_FLG), .SEL(DEST_FLG));
+   
+   assign ROUT_PORT = DEST_FLG[7] ? 7 :
+		      DEST_FLG[6] ? 6 :
+		      DEST_FLG[5] ? 5 :
+		      DEST_FLG[4] ? 4 :
+		      DEST_FLG[3] ? 3 :
+		      DEST_FLG[2] ? 2 :
+		      DEST_FLG[1] ? 1 : 0;
+    */
+
+   // - - - - - - - - - - - - - - - - - - - -
+   // generate payload
+
+   reg [7:0][63:0] PLD;
+   
+   genvar	   i;
+   generate
+      for (i=0; i<8; i=i+1) begin : payload_gen
+	 always @ (posedge CLK) begin
+	    if (RST | STAT[0]) begin
+               PLD[i] <= i;
+	    end else begin
+	       if (RTX_Q_VALID & STAT[1]) begin
+		  PLD[i] <= PLD[i] + 8;
+	       end
+	    end
+	 end
+      end
+   endgenerate
+   
+   always @ (posedge CLK) begin
+      if (RST) begin
+	 STAT <= 3'b001;
+	 FALSE <= 0;
+	 DONE <= 0;
+      end else begin
+	 case (STAT)
+	   3'b001: begin
+	      if (RTX_Q_VALID) begin
+		 FALSE <= ((RTX_Q[0][55:0] != PortNo) & ~DONE) ? 1 : 0;
+		 DONE <= 1;
+		 if (RTX_Q[7][63:56] == 0) begin
+		    LEN <= RTX_Q[7];
+		    STAT <= 3'b010;
+		 end
+	      end else begin
+		 FALSE <= 0;
+	      end // else: !if(RTX_Q_VALID)
+	   end
+	   
+	   3'b010: begin
+	      DONE <= 0;
+	      FALSE <= (RTX_Q_VALID & (
+			(PLD[7][31:0] != RTX_Q[7][31:0]) |
+			(PLD[6][31:0] != RTX_Q[6][31:0]) |
+			(PLD[5][31:0] != RTX_Q[5][31:0]) |
+			(PLD[4][31:0] != RTX_Q[4][31:0]) |
+			(PLD[3][31:0] != RTX_Q[3][31:0]) |
+			(PLD[2][31:0] != RTX_Q[2][31:0]) |
+			(PLD[1][31:0] != RTX_Q[1][31:0]) |
+			(PLD[0][31:0] != RTX_Q[0][31:0]) |
+			(RTX_Q[7][63:32] != RTX_Q[6][63:32]) |
+			(RTX_Q[6][63:32] != RTX_Q[5][63:32]) |
+			(RTX_Q[5][63:32] != RTX_Q[4][63:32]) |
+			(RTX_Q[4][63:32] != RTX_Q[3][63:32]) |
+			(RTX_Q[3][63:32] != RTX_Q[2][63:32]) |
+			(RTX_Q[2][63:32] != RTX_Q[1][63:32]) |
+			(RTX_Q[1][63:32] != RTX_Q[0][63:32]) |
+			(RTX_Q[0][63:32] != RTX_Q[7][63:32]))
+			) ? 1 : 0;
+	      if (RTX_Q_VALID & (RTX_Q[7][31:0] >= (LEN - 1))) begin
+		 STAT <= 3'b001;
+	      end
+	   end
+	   
+	   default: begin
+	      STAT <= 3'b001;
+	   end
+	 endcase // case (STAT)
+      end // else: !if(RST)
+   end // always @ (posedge CLK)
+   
+endmodule // mkverif_rx
+
+`default_nettype wire

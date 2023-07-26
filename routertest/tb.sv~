@@ -1,0 +1,21 @@
+`timescale 1ns/1ps
+module router_test();
+   parameter STEP = 10;
+   reg RST, CLK;
+
+   router uut (.RST(RST),
+	       .CLK(CLK));
+
+   initial begin
+      $shm_open();
+      $shm_probe("SA");
+
+      RST <= 1;
+
+      #(2.1*STEP)
+      RST <= 0;
+
+      #(1000*STEP)
+      $finish;
+   end // initial begin
+endmodule
